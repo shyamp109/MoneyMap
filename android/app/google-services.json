@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1015587860202",
+    "project_id": "expensetracker-bd710",
+    "storage_bucket": "expensetracker-bd710.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015587860202:android:4d5e86c9a8016bb76f3193",
+        "android_client_info": {
+          "package_name": "com.moneymap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAenlNLbmvDEDAuEqiPlP67IZaJa96PSL0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
