@@ -4,6 +4,10 @@ export const ICONS = {
   bottomAdd: require('./icons/close.png'),
   bottomBudget: require('./icons/pie-chart.png'),
   bottomProfile: require('./icons/user.png'),
+  google: require('./icons/google.png'),
+  close: require('./icons/close1.png'),
+  eye: require('./icons/eye.png'),
+  eyeclose: require('./icons/eyeClose.png'),
 };
 
 export const IMAGES = {

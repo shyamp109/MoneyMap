@@ -110,9 +110,31 @@ export const useStyles = () => {
       fontSize: scale(14),
       color: COLORS.grayLight,
       textAlign: 'center',
+      marginTop: height * 0.02,
+    },
+    googleButton: {
+      flexDirection: 'row',
+      gap: 10,
+      backgroundColor: COLORS.secondary,
+      paddingHorizontal: height * 0.06,
+      borderRadius: height * 0.015,
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: height * 0.06,
+    },
+    googleText: {
+      fontFamily: FONTS.MontserratMedium,
+      fontSize: scale(14),
+      color: COLORS.primary,
+      textAlign: 'center',
+    },
+    googleIcon: {
+      height: height * 0.03,
+      width: height * 0.03,
+      resizeMode: 'contain',
     },
     btn: {
-      marginVertical: height * 0.02,
+      marginTop: height * 0.02,
       alignItems: 'center',
     },
   });

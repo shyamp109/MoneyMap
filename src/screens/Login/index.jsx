@@ -19,10 +19,9 @@ import CustomButton from '../../components/CustomButton';
 import {scale} from 'react-native-size-matters';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import {showError} from '../../utills/helper';
+import {height, showError, width} from '../../utills/helper';
 import {userData, userToken} from '../../redux/reducres/authSlice';
 import {useDispatch} from 'react-redux';
-
 import {
   GoogleSignin,
   statusCodes,
@@ -31,6 +30,7 @@ import {
 const Login = ({navigation}) => {
   const styles = useStyles();
   const [isLoading, setIsLoading] = useState(false);
+  const [GoogleIsLoading, setGoogleIsLoading] = useState(false);
   const password = useRef(null);
   const dispatch = useDispatch();
   const {
@@ -66,15 +66,12 @@ const Login = ({navigation}) => {
         showError('User record not found in Firestore.');
       }
     } catch (error) {
-      console.log('error: ', error);
-      if (error.code === 'auth/user-not-found') {
-        showError('No user found with this email.');
+      if (error.code === 'auth/invalid-credential') {
+        showError('Invalid credential');
       } else if (error.code === 'auth/wrong-password') {
-        showError('Incorrect password.');
+        showError('wrong password.');
       } else if (error.code === 'auth/invalid-email') {
         showError('Invalid email address.');
-      } else if (error.code === 'auth/invalid-credential') {
-        showError('Invalid Credential');
       } else {
         showError('An error occurred. Please try again.');
       }
@@ -85,19 +82,57 @@ const Login = ({navigation}) => {
 
   const handleGoogleSignIn = async () => {
     try {
+      setGoogleIsLoading(true);
+      const isSignedIn = await GoogleSignin.getCurrentUser();
+      if (isSignedIn) {
+        await GoogleSignin.signOut();
+      }
+
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('Google User Data:', userInfo);
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('User cancelled the login process');
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('Signing in...');
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('Play services not available');
-      } else {
-        console.log('Google Sign-In Error:', error);
+
+      const {user, idToken} = userInfo.data;
+      const {email, name, photo} = user;
+
+      if (!idToken) {
+        return;
       }
+
+      const uid = user.id;
+      const userDocRef = firestore().collection('users').doc(uid);
+      const userSnapshot = await userDocRef.get();
+
+      if (!userSnapshot.exists) {
+        await userDocRef.set(
+          {
+            username: name,
+            email,
+            profilePic: photo,
+            createdAt: firestore.FieldValue.serverTimestamp(),
+          },
+          {merge: true},
+        );
+      }
+      const updatedUserDoc = await userDocRef.get();
+      const userDataFromFirestore = updatedUserDoc.data();
+      dispatch(userData(userDataFromFirestore));
+      dispatch(userToken(idToken));
+      setGoogleIsLoading(false);
+      navigation.navigate('home');
+    } catch (error) {
+      console.error('🔥 Google Sign-In Error:', JSON.stringify(error, null, 2));
+
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        showError('Google Sign-In was cancelled.');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        showError('Google Sign-In is already in progress.');
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        showError('Google Play Services not available.');
+      } else {
+        showError('Google Sign-In failed. Please try again.');
+      }
+    } finally {
+      setGoogleIsLoading(false);
     }
   };
 
@@ -192,32 +227,67 @@ const Login = ({navigation}) => {
               title="Log In"
               onPress={handleSubmit(onSignInPressed)}
             />
+            <Text style={styles.individualText}>
+              Don't have an account?
+              <Text
+                style={{
+                  fontFamily: FONTS.MontserratMedium,
+                  fontSize: scale(14),
+                  color: COLORS.primary,
+                }}
+                onPress={() => {
+                  navigation.navigate('Register', {
+                    isEditable: false,
+                    driverData: null,
+                  });
+                }}>
+                {' ' + 'Sign up'}
+              </Text>
+            </Text>
           </View>
-
-          <TouchableOpacity
-            style={styles.googleButton}
-            onPress={handleGoogleSignIn}>
-            {/* <Image source={ICONS.google} style={styles.googleIcon} /> */}
-            <Text style={styles.googleText}>Sign in with Google</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.individualText}>
-            Don't have an account?
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 5,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginVertical: height * 0.02,
+            }}>
+            <View
+              style={{
+                width: width * 0.4,
+                height: 1,
+                borderWidth: 1,
+                borderColor: COLORS.secondary,
+              }}
+            />
             <Text
               style={{
                 fontFamily: FONTS.MontserratMedium,
-                fontSize: scale(14),
-                color: COLORS.primary,
-              }}
-              onPress={() => {
-                navigation.navigate('Register', {
-                  isEditable: false,
-                  driverData: null,
-                });
+                fontSize: scale(12),
+                color: COLORS.black,
+                textAlign: 'left',
               }}>
-              {' ' + 'Sign up'}
+              Or
             </Text>
-          </Text>
+            <View
+              style={{
+                width: width * 0.4,
+                height: 1,
+                borderWidth: 1,
+                borderColor: COLORS.secondary,
+              }}
+            />
+          </View>
+          <CustomButton
+            loading={isLoading}
+            disabled={isLoading}
+            title="Sign in with Google"
+            icon={ICONS.google}
+            isborder={true}
+            isColor={COLORS.primary}
+            onPress={handleGoogleSignIn}
+          />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

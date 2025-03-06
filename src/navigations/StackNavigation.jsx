@@ -8,13 +8,11 @@ import AuthNavigator from './AuthNavigator';
 const StackNavigation = () => {
   const [isSplashScreen, setSplashScreen] = useState(true);
   const {userInfo} = useSelector(state => state.auth);
-  console.log('userInfo: ', userInfo);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setSplashScreen(false);
     }, 3000);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -24,7 +22,7 @@ const StackNavigation = () => {
 
   return (
     <NavigationContainer>
-      {userInfo?.token ? <HomeNavigator /> : <AuthNavigator />}
+      {userInfo.token ? <HomeNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };

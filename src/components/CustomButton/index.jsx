@@ -33,7 +33,7 @@ const CustomButton = ({
         {
           borderColor: isborder ? COLORS.primary : null,
           borderWidth: isborder ? 1 : 0,
-          backgroundColor: COLORS.primary,
+          backgroundColor: isborder ? null : COLORS.primary,
           width: smallButton ? width * 0.6 : width * 0.9,
         },
       ]}>

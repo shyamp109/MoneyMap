@@ -112,7 +112,7 @@ const CustomTextInput = forwardRef((props, ref) => {
                     placeholderTextColor={COLORS.textInputPlaceholder}
                     onBlur={onBlur}
                     placeholder={placeholder}
-                    style={[styles.textInput, {color: COLORS.primary}]}
+                    style={[styles.textInput, {color: COLORS.black}]}
                     secureTextEntry={type === 'password' && !eye}
                     onSubmitEditing={onSubmitEditing}
                     returnKeyType={returnKeyType}
@@ -139,7 +139,7 @@ const CustomTextInput = forwardRef((props, ref) => {
                         color:
                           editable === false
                             ? COLORS.textInputPlaceholder
-                            : COLORS.primary,
+                            : COLORS.black,
                       },
                     ]}
                     secureTextEntry={type === 'password' && !eye}
@@ -161,7 +161,7 @@ const CustomTextInput = forwardRef((props, ref) => {
                       style={{
                         height: height * 0.025,
                         width: height * 0.025,
-                        tintColor: COLORS.grayLight,
+                        tintColor: focused ? COLORS.primary : COLORS.grayLight,
                         resizeMode: 'contain',
                       }}
                     />

@@ -13,10 +13,10 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     userData: (state, action) => {
-      state.userInfo = action.payload;
+      state.userInfo.userData = action.payload;
     },
     userToken: (state, action) => {
-      state.token = action.payload;
+      state.userInfo.token = action.payload;
     },
     setOnboarding: (state, action) => {
       state.isFirstTimeUser = action.payload;

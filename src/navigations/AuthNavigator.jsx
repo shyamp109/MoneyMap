@@ -26,7 +26,7 @@ const AuthNavigator = () => {
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
           <Stack.Screen name="OTPValidate" component={OTPValidate} />
           <Stack.Screen name="ResetPassword" component={ResetPassword} />
-          <Stack.Screen key={'home'} name={'home'} component={MyTabs} />
+          {/* <Stack.Screen key={'home'} name={'home'} component={MyTabs} /> */}
         </React.Fragment>
       )}
     </Stack.Navigator>

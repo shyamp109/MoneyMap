@@ -115,5 +115,41 @@ export const useStyles = () => {
       marginVertical: height * 0.02,
       alignItems: 'center',
     },
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalView: {
+      width: width * 0.85,
+      backgroundColor: 'white',
+      borderRadius: scale(20),
+      padding: scale(20),
+      alignItems: 'center',
+      elevation: 5,
+    },
+    modalContent: {
+      alignItems: 'center',
+      gap: scale(20),
+    },
+    successIcon: {
+      height: height * 0.15,
+      width: height * 0.15,
+      resizeMode: 'contain',
+      alignSelf: 'center',
+      tintColor: COLORS.primary,
+    },
+    title: {
+      fontSize: scale(18),
+      fontFamily: FONTS.MontserratSemibold,
+      color: COLORS.heading,
+      textAlign: 'center',
+    },
+    subtitle: {
+      fontSize: scale(13),
+      textAlign: 'center',
+      fontFamily: FONTS.MontserratMedium,
+      color: COLORS.heading,
+    },
   });
 };
